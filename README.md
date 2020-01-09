@@ -1,7 +1,7 @@
 # polygon-operations
-simplifiers polygon and creates valid from unvalid polygon
+simplifiers polygons and creates valid polygons from non-valid polygons
 
-Basically, in this package, two functions are provided:
+Basically, two functions are provided in this package:
 one function to simplify a polygon and another to create a valid from a non-valid polygon.
 They are called simplify_polygon() or create_valid_polygon(), respectively.
 Parameters concerning the desired precision should be supplied.
