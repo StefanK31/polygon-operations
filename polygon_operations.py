@@ -16,7 +16,7 @@ def simplify_polygon(initial_polygon, criteria=1, showplot=False, direct_erase_l
      points and the corrected polygon in the same format in a form of a numpy array.
      """
     def point_importance(polygon):
-        """Calculates the criteria for all points"""
+        """Calculates importance for all points"""
         angles = all_angles(polygon)
         dists = total_dists(polygon)
         criteria1 = np.array([dist[0] * dist[1] * np.sin(abs(angle / 180 * np.pi)) for dist, angle in zip(dists, angles)])
@@ -25,6 +25,7 @@ def simplify_polygon(initial_polygon, criteria=1, showplot=False, direct_erase_l
         return np.array(final_criteria) ** (2/3)
 
     def angle(p_b, p, p_a):
+        """gives angle difference for three seubsequent points"""
         diff_b = p - p_b
         diff_a = p_a - p
         if diff_b[1]==0:
@@ -38,6 +39,7 @@ def simplify_polygon(initial_polygon, criteria=1, showplot=False, direct_erase_l
         return angle_a - angle_b
 
     def all_angles(polygon):
+        """Calculates all inner angles of the polygon"""
         n = len(polygon)
         angles = []
         for i in range(len(polygon)):
@@ -48,6 +50,7 @@ def simplify_polygon(initial_polygon, criteria=1, showplot=False, direct_erase_l
         return angles
 
     def all_point_line_dis(polygon):
+        """calculates the distance between every point to the imagined line between previous and subsequent points"""
         n = len(polygon)
         dis_pl = []
         for i in range(len(polygon)):
@@ -60,6 +63,7 @@ def simplify_polygon(initial_polygon, criteria=1, showplot=False, direct_erase_l
         return np.array(dis_pl)
 
     def total_dists(polygon):
+        """calculates the distance for all points to its neighbors"""
         n = len(polygon)
         dist = []
         for i in range(len(polygon)):
@@ -127,7 +131,7 @@ def create_valid_polygon(initial_polygon, critical_distance_line_crosspoint=1, c
     critical_area_additional_polygon is a surface area under that areas may be neglected"""
     def avoid_all_crosspoints(ini_polygon):
         """This function recursively divides the polygon at crosspoints is subpolygons and then merges them together
-        at new points next to the vrosspoint"""
+        at new points next to the crosspoint"""
         def merge_polygons(poly1, poly2):
             # plot_polygons([poly1, poly2])
             # plt.title('polygons to merge')
@@ -280,7 +284,7 @@ def create_valid_polygon(initial_polygon, critical_distance_line_crosspoint=1, c
                     pass
                 else:
                     polygon[j] = polygon[j] + minor_distance
-    # Strategie: recursevly subdevide polygons and merge again
+    # Strategy: recursevly subdivide polygons and merge again
     new_polygon = avoid_all_crosspoints(polygon)
     new_polygon = avoid_all_crosspoints(np.flip(new_polygon, axis=0))
     if Polygon(new_polygon).is_valid:
@@ -333,6 +337,7 @@ def zone(point_in_long_lat):
 
 
 def rotate_origin(coor, rot_angle):
+    """Rotates coords around an rotation_angle counterclockwise"""
     rot_angle = np.deg2rad(rot_angle)
     xnew = + np.cos(rot_angle) * coor[0] + np.sin(rot_angle) * coor[1]
     ynew = - np.sin(rot_angle) * coor[0] + np.cos(rot_angle) * coor[1]
@@ -402,7 +407,6 @@ def plot_polygons(polygons):
         plt.plot(polygon.T[0], polygon.T[1])
         plt.plot(polygon.T[0], polygon.T[1],'rx')
         plt.plot(polygon.T[0][0], polygon.T[1][0],'bx')
-    pass
 
 
 def plot_parcels_dict(parcels_dict, newplot=True, all_keys=False):
